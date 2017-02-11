@@ -5,7 +5,7 @@ var MongoClient = require('mongodb').MongoClient
 
 
 // nightmareCode(coin1,coin2,amount)
-//nightmareCode('BTC','USD',22)
+nightmareCode('BTC','USD',22)
 
 
 // ===============NIGHTMARE CODE=======================
