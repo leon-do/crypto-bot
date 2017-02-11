@@ -1,10 +1,17 @@
 var Nightmare = require('nightmare');		
 var nightmare = Nightmare({ show: true });
+var MongoClient = require('mongodb').MongoClient
 
-var coin1 = "BTC"
-var coin2 = "USD"
-var amount = 33;
 
+
+// nightmareCode(coin1,coin2,amount)
+nightmareCode('BTC','USD',22)
+
+
+// ===============NIGHTMARE CODE=======================
+
+
+function nightmareCode(coin1,coin2,amount){
 nightmare
   .goto('http://localhost:8000')
  
@@ -12,7 +19,28 @@ nightmare
   .select('body > div.container.row > div:nth-child(2) > div > input', coin2)
   .type('body > div.container.row > input', amount)
   //.click('body > div.container.row > button')
-
+  .then(function(){
+  	mongoDbCode(coin1, coin2)
+  })
   .catch(function (error) {
     console.error('Search failed:', error);
   });
+}
+
+
+
+// ===============MONGODB CODE=======================
+
+function mongoDbCode(coin1, coin2){
+	// Connection URL
+	var url = 'mongodb://localhost:27017/test';
+
+	// Use connect method to connect to the server
+	MongoClient.connect(url, function(err, db) {
+
+	  //Insert data
+	  db.collection('botCollections').insertMany([{name:'nodeman', age:99}])
+
+
+	});
+}
