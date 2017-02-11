@@ -5,7 +5,7 @@ var MongoClient = require('mongodb').MongoClient
 
 
 // nightmareCode(coin1,coin2,amount)
-nightmareCode('BTC','USD',22)
+//nightmareCode('BTC','USD',22)
 
 
 // ===============NIGHTMARE CODE=======================
@@ -20,7 +20,7 @@ nightmare
   .type('body > div.container.row > input', amount)
   //.click('body > div.container.row > button')
   .then(function(){
-  	mongoDbCode(coin1, coin2)
+  	mongoDbCode(coin1, coin2,amount)
   })
   .catch(function (error) {
     console.error('Search failed:', error);
@@ -30,8 +30,10 @@ nightmare
 
 
 // ===============MONGODB CODE=======================
+mongoDbCode('BTC','USD',22)
 
-function mongoDbCode(coin1, coin2){
+
+function mongoDbCode(coin1, coin2,amount){
 	// Connection URL
 	var url = 'mongodb://localhost:27017/test';
 
@@ -39,7 +41,7 @@ function mongoDbCode(coin1, coin2){
 	MongoClient.connect(url, function(err, db) {
 
 	  //Insert data
-	  db.collection('botCollections').insertMany([{name:'nodeman', age:99}])
+	  db.collection('botCollections').insertMany([{coin1:coin1, coin2:coin2, amount:amount, date:Date()}])
 
 
 	});
