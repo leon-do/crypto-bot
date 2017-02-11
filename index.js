@@ -30,7 +30,6 @@ nightmare
 
 
 // ===============MONGODB CODE=======================
-mongoDbCode('BTC','USD',22)
 
 
 function mongoDbCode(coin1, coin2,amount){
