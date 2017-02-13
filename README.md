@@ -1,0 +1,1 @@
+using twitter and aylien to predict cryptocurrency trends.
