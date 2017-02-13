@@ -1,24 +1,88 @@
 var Nightmare = require('nightmare');		
 var nightmare = Nightmare({ show: true });
 var MongoClient = require('mongodb').MongoClient
+var Twitter = require('twitter');
+var AYLIENTextAPI = require('aylien_textapi');
+var tokens = require('./tokens.js')
 
 
 
-// nightmareCode(coin1,coin2,amount)
-nightmareCode('BTC','USD',22)
+
+// =======================TWITTER==================================
 
 
-// ===============NIGHTMARE CODE=======================
+//var used to collect the stream
+var tweet;
+
+
+// get twitter stream
+var stream = client.stream('statuses/filter', {track: 'bitcoin'});
+stream.on('data', function(event) {
+  tweet = event.text.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').replace(/#/g, "").toString()
+});
+
+
+//send tweet every 30 sends
+setInterval(function(){
+  //console.log(tweet)
+  analyzeText(tweet, "bitcoin")
+}, 5000)
+
+
+
+
+
+// =======================AYLIEN==================================
+
+// passes text and coin to Aylien
+function analyzeText(text, coin){
+  textapi.sentiment({
+    'text': text
+  }, function(error, response) {
+    console.log(response);
+    if (response.polarity !== 'neutral'){
+      tradeCrypto(response.polarity, coin)
+    }
+  }); 
+}
+
+
+
+
+// ===============SCRAPER=======================
+
+function tradeCrypto(polarity, coin2){
+  
+  console.log("trade " + polarity)
+  console.log("trade " + coin2)
+
+  // scrape where my coins are at
+  // <-- code here code here code here code here code here code here code here code here
+
+  if (polarity === 'positive'){
+      nightmareCode (coin1, coin2, amount)
+  } else (
+      nightmareCode (coin2, coin1, amount)
+  )
+
+}
+
+
+
+
+
+
+// ===============NIGHTMARE=======================
 
 
 function nightmareCode(coin1,coin2,amount){
 nightmare
   .goto('http://localhost:8000')
  
-  .select('body > div.container.row > div:nth-child(1) > div > input', coin1)
-  .select('body > div.container.row > div:nth-child(2) > div > input', coin2)
+  .select('#select_value_label_0 > span:nth-child(1) > div', coin1)
+  .select('#select_value_label_1 > span:nth-child(1) > div', coin2)
   .type('body > div.container.row > input', amount)
-  //.click('body > div.container.row > button')
+  //.click('#transfer-button > span')
   .then(function(){
   	mongoDbCode(coin1, coin2,amount)
   })
